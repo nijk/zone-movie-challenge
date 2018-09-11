@@ -2,11 +2,15 @@ const LANG = 'en-GB';
 const KEY = 'f29b8b0f8ba12153ed41105fe7f67c66';
 const URL = 'https://api.themoviedb.org';
 const VERSION = '3';
+const IMG_URL = 'https://image.tmdb.org/t/p';
+const IMG_SIZE_DEFAULT = 'original';
 
 const endpoints = {
   nowPlaying: '/movie/now_playing',
   genres: '/genre/movie/list',
 };
+
+export const buildImgURL = (path, size = IMG_SIZE_DEFAULT) => `${IMG_URL}/${size}/${path}`;
 
 const buildURL = (endpointName = '', config = {}) => {
   if (!KEY || !URL || !VERSION) {
