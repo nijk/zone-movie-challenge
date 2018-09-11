@@ -1,7 +1,6 @@
+const LANG = 'en-GB';
 const KEY = 'f29b8b0f8ba12153ed41105fe7f67c66';
-
 const URL = 'https://api.themoviedb.org';
-
 const VERSION = '3';
 
 const endpoints = {
@@ -21,9 +20,12 @@ const buildURL = (endpointName = '', config = {}) => {
     return '';
   }
 
-  const { page } = config;
+  const { page = 1 } = config;
   const endpoint = endpoints[endpointName];
-  const params = [[ 'api_key', KEY ]];
+  const params = [
+    [ 'api_key', KEY ],
+    [ 'language', LANG ],
+  ];
 
   if (page > 1) {
     params.push([ 'page', page ]);
@@ -34,12 +36,23 @@ const buildURL = (endpointName = '', config = {}) => {
   return `${URL}/${VERSION}${endpoint}?${paramString}`;
 };
 
-export const fetchData = (endpointName, config) => {
+export async function fetchData(endpointName, config = {}) {
   const { page } = config;
   const URL = buildURL(endpointName, { page });
 
-  return fetch(URL);
-};
+  let response = await fetch(URL);
+  const { status, statusText, url } = response;
+
+  if (status === 200) {
+    return await response.json();
+  }
+
+  const message = `
+  ${status} for ${url}.
+  Reason: ${statusText}
+  `;
+  throw new Error(message);
+}
 
 export default {
   endpoints

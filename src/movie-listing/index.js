@@ -9,27 +9,17 @@ class MovieListing extends Component {
   };
 
   componentDidMount() {
-    const fetchNowPlaying = (page = 1) => fetchData('nowPlaying', { page })
-      .then(response => {
-        response.json().then(data => {
-          const { page: pg, results, total_pages } = data;
+    fetchData('nowPlaying')
+      .then(data => {
+        const { results } = data;
 
-          console.log('MovieListing->didMount', data);
-
-          if (results.length) {
-            this.setState((prevState) => ({
-              movies: [ ...prevState.movies, ...results],
-            }), () => {
-              if (pg < 40) {
-                console.log(`About to fetch page ${pg + 1} of ${total_pages}`);
-                fetchNowPlaying(pg + 1);
-              }
-            });
-          }
-        });
-      });
-
-    fetchNowPlaying();
+        if (results && results.length) {
+          this.setState((prevState) => ({
+            movies: [ ...prevState.movies, ...results],
+          }));
+        }
+      })
+      .catch(console.warn);
   }
 
   render() {
