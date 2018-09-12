@@ -11,8 +11,10 @@ const List = styled.ul`
 
 class MovieListing extends Component {
   state = {
-    genres: [],
-    movies: [],
+    filteredGenres: [], // collection of genres selected in the filter
+    filteredMinVote: 3.0,
+    genres: [], // all genres
+    movies: [], // all movies
   };
 
   componentDidMount() {
@@ -21,9 +23,7 @@ class MovieListing extends Component {
         const { genres } = data;
 
         if (genres && genres.length) {
-          this.setState({
-            genres,
-          });
+          this.setState({ genres });
         }
       })
       .catch(console.warn);
@@ -33,27 +33,92 @@ class MovieListing extends Component {
         const { results } = data;
 
         if (results && results.length) {
-
-          // @todo: comment on API paging and how that might potentially be handled - API v4 maybe?
-          this.setState({
-            movies: results,
-          });
+          this.setState({ movies: results });
         }
       })
       .catch(console.warn);
   }
 
-  render() {
-    const { genres, movies } = this.state;
+  /**
+   * Toggles the provided genre in the filter state
+   * @param genre
+   */
+  filterByGenre = (genre) => {
+    if (!genre) {
+      return;
+    }
 
-    if (!movies.length) {
+    const isFiltered = this.state.filteredGenres.some(({ id }) => id === genre.id);
+
+    this.setState(({ filteredGenres }) => ({
+      filteredGenres: isFiltered ?
+        filteredGenres.filter(({ id }) => id !== genre.id) : [ ...filteredGenres, genre ],
+    }));
+  };
+
+  /**
+   * Returns a subset of movies that match the genre filters
+   * @param movies
+   * @returns {Array<Object>}
+   */
+  getMoviesFilteredByGenre = (movies = []) => {
+    const { filteredGenres } = this.state;
+
+    if (!filteredGenres.length) {
+      return movies;
+    }
+
+    return movies.filter(({ genre_ids }) =>
+      filteredGenres.every(({ id }) => genre_ids.some(genreId => genreId === id)));
+  };
+
+  /**
+   * Returns a subset of movies that match the genre filters
+   * @param movies
+   * @returns {Array<Object>}
+   */
+  getMoviesFilteredByVoteAverage = (movies = []) => {
+    const { filteredMinVote } = this.state;
+
+    if (!filteredMinVote) {
+      return movies;
+    }
+
+    return movies.filter(({ vote_average }) => vote_average >= filteredMinVote);
+  };
+
+  getMovies = () => {
+    const { movies } = this.state;
+    const movieList = this.getMoviesFilteredByGenre(movies);
+
+    return this.getMoviesFilteredByVoteAverage(movieList);
+  };
+
+  render() {
+    const { filteredGenres, genres, movies } = this.state;
+
+    if (!movies.length || !genres.length) {
       return 'Loading';
     }
 
     return (
-      <List>
-        { movies.map(movie => <Movie key={`movie-${movie.id}`} genres={genres} movie={movie} />) }
-      </List>
+      <div>
+        <div>
+          Filters: { !!filteredGenres.length && filteredGenres.map(({ name }) => name).join(', ') }
+        </div>
+        <List>
+          {
+            this.getMovies().map(movie => (
+              <Movie
+                genres={genres}
+                key={`movie-${movie.id}`}
+                movie={movie}
+                onClickGenre={this.filterByGenre}
+              />
+            ))
+          }
+        </List>
+      </div>
     );
   }
 }

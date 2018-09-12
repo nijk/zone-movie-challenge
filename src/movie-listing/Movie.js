@@ -52,7 +52,8 @@ const GenresListItem = styled.li`
   }
 `;
 
-const Movie = ({ genres, movie }) => {
+// @todo: propTypes & defaultProps
+const Movie = ({ genres, movie, onClickGenre }) => {
   const { backdrop_path, genre_ids, overview, title } = movie;
   const matchedGenres = genres.filter(({ id }) => genre_ids.some(genre_id => id === genre_id));
   const size = 'w1280';
@@ -65,7 +66,13 @@ const Movie = ({ genres, movie }) => {
         {
           matchedGenres && (
             <GenresList>
-              { matchedGenres.map(({name}) => <GenresListItem>{name}</GenresListItem>) }
+              {
+                matchedGenres.map(genre => (
+                  <GenresListItem key={`genre-${genre.id}`} onClick={() => onClickGenre(genre)}>
+                    {genre.name}
+                  </GenresListItem>
+                ))
+              }
             </GenresList>
           )
         }
