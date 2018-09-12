@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { transparentize } from 'polished';
 
+import { colours } from '../styles';
+
 import { buildImgURL } from './api-tmdb';
 
 const ListItem = styled.li`
@@ -12,11 +14,10 @@ const ListItem = styled.li`
   padding: 0;
 `;
 
-// @todo: sort out colour vars and rems
 const TitleBar = styled.div`
   align-items: center;
-  background-color: #222;
-  color: #fff;
+  background-color: ${colours.darkGrey};
+  color: ${colours.white};
   display: flex;
   justify-content: space-between;
   padding: 1rem;
@@ -39,13 +40,13 @@ const GenresList = styled.ul`
 `;
 
 const GenresListItem = styled.li`
-  background-color: ${transparentize(0.25, '#fff')};
+  background-color: ${transparentize(0.25, colours.white)};
   border-radius: .5rem;
-  color: #222;
+  color: ${colours.darkGrey};
   list-style: none;
   margin: 0 1rem 0 0;
   padding: .5rem 1rem;
-  
+
   &:last-child {
     margin-right: 0;
   }

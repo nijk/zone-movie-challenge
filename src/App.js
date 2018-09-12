@@ -1,24 +1,40 @@
 import React, { Component } from 'react';
+import styled from 'styled-components';
 
 import ErrorBoundary from './ErrorBoundary';
 import MovieListing from './movie-listing';
 
-// @todo: remove
-import logo from './logo.svg';
-import './App.css';
+import './App.styles';
+import { colours } from './styles';
+
+const Wrapper = styled.div`
+`;
+
+const Header = styled.header`
+  background-color: ${colours.darkGrey};
+  color: ${colours.white};
+  margin: 0 0 2rem;
+  padding: 2rem;
+`;
+
+const Main = styled.main`
+  margin: 0 auto;
+  max-width: 1280px;
+`;
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <ErrorBoundary>
-          <MovieListing />
-        </ErrorBoundary>
-      </div>
+      <Wrapper>
+        <Header>
+          Header
+        </Header>
+        <Main>
+          <ErrorBoundary>
+            <MovieListing />
+          </ErrorBoundary>
+        </Main>
+      </Wrapper>
     );
   }
 }
