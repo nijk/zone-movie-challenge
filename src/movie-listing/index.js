@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
+import styled from 'styled-components';
 
-import { buildImgURL, fetchData } from './api-tmdb';
+import Movie from './Movie';
+import { fetchData } from './api-tmdb';
+
+const List = styled.ul`
+  margin: 0;
+  padding: 0;
+`;
 
 class MovieListing extends Component {
   state = {
@@ -43,23 +50,12 @@ class MovieListing extends Component {
       return 'Loading';
     }
 
-    return movies.map(movie => <Movie key={`movie-${movie.id}`} genres={genres} movie={movie} />);
+    return (
+      <List>
+        { movies.map(movie => <Movie key={`movie-${movie.id}`} genres={genres} movie={movie} />) }
+      </List>
+    );
   }
 }
-
-const Movie = ({ genres, movie }) => {
-  const { genre_ids, backdrop_path, title } = movie;
-  const matchedGenres = genres.filter(({ id }) => genre_ids.some(genre_id => id === genre_id));
-  const size = 'w1280';
-  const imgURL = buildImgURL(backdrop_path, size);
-
-  return (
-    <div>
-      <h2>{title}</h2>
-      { matchedGenres.map(({ name }) => name).join(', ') }
-      <img alt="" src={imgURL} />
-    </div>
-  );
-};
 
 export default MovieListing;
