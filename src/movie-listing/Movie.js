@@ -54,7 +54,7 @@ const GenresListItem = styled.li`
 
 // @todo: propTypes & defaultProps
 const Movie = ({ genres, movie, onClickGenre }) => {
-  const { backdrop_path, genre_ids, overview, title } = movie;
+  const { backdrop_path, genre_ids, popularity, overview, title } = movie;
   const matchedGenres = genres.filter(({ id }) => genre_ids.some(genre_id => id === genre_id));
   const size = 'w1280';
   const imgURL = buildImgURL(backdrop_path, size);

@@ -1,0 +1,21 @@
+const sortObjectByKeyDefaults = { desc: true };
+
+export const sortObjectByKey = (key, options) => {
+  const config = { ...sortObjectByKeyDefaults, ...options };
+
+  if (config.type === 'number') {
+    return (a, b) => config.order === 'desc' ? b[key] - a[key] : a[key] - b[key];
+  }
+
+  return (a, b) => {
+    if (a[key] < b[key]) {
+      return config.order === 'desc' ? -1 : 1;
+    }
+
+    if (a[key] > b[key]) {
+      return config.order === 'desc' ? 1 : -1;
+    }
+
+    return 0;
+  };
+};

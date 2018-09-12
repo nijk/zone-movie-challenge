@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
+import { sortObjectByKey } from '../utils';
+
+import MovieFilters from './MovieFilters';
 import Movie from './Movie';
 import { fetchData } from './api-tmdb';
 
@@ -11,8 +14,8 @@ const List = styled.ul`
 
 class MovieListing extends Component {
   state = {
-    filteredGenres: [], // collection of genres selected in the filter
-    filteredMinVote: 3.0,
+    selectedGenres: [], // collection of genres selected in the filter
+    selectedRating: 3.0,
     genres: [], // all genres
     movies: [], // all movies
   };
@@ -48,67 +51,89 @@ class MovieListing extends Component {
       return;
     }
 
-    const isFiltered = this.state.filteredGenres.some(({ id }) => id === genre.id);
+    const isFiltered = this.state.selectedGenres.some(({ id }) => id === genre.id);
 
-    this.setState(({ filteredGenres }) => ({
-      filteredGenres: isFiltered ?
-        filteredGenres.filter(({ id }) => id !== genre.id) : [ ...filteredGenres, genre ],
+    this.setState(({ selectedGenres }) => ({
+      selectedGenres: isFiltered ?
+        selectedGenres.filter(({ id }) => id !== genre.id) : [ ...selectedGenres, genre ],
     }));
   };
 
   /**
    * Returns a subset of movies that match the genre filters
-   * @param movies
+   * @param movies {Array<Object>}
    * @returns {Array<Object>}
    */
   getMoviesFilteredByGenre = (movies = []) => {
-    const { filteredGenres } = this.state;
+    const { selectedGenres } = this.state;
 
-    if (!filteredGenres.length) {
+    if (!selectedGenres.length) {
       return movies;
     }
 
     return movies.filter(({ genre_ids }) =>
-      filteredGenres.every(({ id }) => genre_ids.some(genreId => genreId === id)));
+      selectedGenres.every(({ id }) => genre_ids.some(genreId => genreId === id)));
   };
 
   /**
-   * Returns a subset of movies that match the genre filters
-   * @param movies
+   * Returns a subset of movies that match the minimum rating
+   * @param movies {Array<Object>}
    * @returns {Array<Object>}
    */
-  getMoviesFilteredByVoteAverage = (movies = []) => {
-    const { filteredMinVote } = this.state;
+  getMoviesFilteredByRating = (movies = []) => {
+    const { selectedRating } = this.state;
 
-    if (!filteredMinVote) {
+    if (!selectedRating) {
       return movies;
     }
 
-    return movies.filter(({ vote_average }) => vote_average >= filteredMinVote);
+    return movies.filter(({ vote_average }) => vote_average >= selectedRating);
   };
 
+  /**
+   * Filters all movies, returning only the movies which should be rendered
+   * @returns {Array<Object>}
+   */
   getMovies = () => {
-    const { movies } = this.state;
-    const movieList = this.getMoviesFilteredByGenre(movies);
+    const movieList = this.getMoviesFilteredByGenre(this.state.movies);
 
-    return this.getMoviesFilteredByVoteAverage(movieList);
+    return this
+      .getMoviesFilteredByRating(movieList)
+      // note: This sort is effectively unnecessary as the API already returns the results ordered by popularity,
+      // but I've explicitly added it to ensure that the requirements are met should the API change in the future
+      .sort(sortObjectByKey('popularity', { type: 'number', order: 'desc' }));
+  };
+
+  getGenres = (movies) => {
+    const { genres } = this.state;
+    const allGenres = movies
+      .reduce((acc, { genre_ids }) => [ ...acc, ...genre_ids ], [])
+      .map(genreId => genres.find(({ id }) => genreId === id))
+      .sort(sortObjectByKey('name', { order: 'desc' }));
+
+    return [ ...new Set(allGenres) ];
   };
 
   render() {
-    const { filteredGenres, genres, movies } = this.state;
+    const { selectedGenres, genres, movies } = this.state;
 
     if (!movies.length || !genres.length) {
       return 'Loading';
     }
 
+    const movieList = this.getMovies();
+    const genreList = this.getGenres(movieList);
+
     return (
       <div>
-        <div>
-          Filters: { !!filteredGenres.length && filteredGenres.map(({ name }) => name).join(', ') }
-        </div>
+        <MovieFilters
+          genres={genreList}
+          onFilterGenre={this.filterByGenre}
+          selectedGenres={selectedGenres}
+        />
         <List>
           {
-            this.getMovies().map(movie => (
+            movieList.map(movie => (
               <Movie
                 genres={genres}
                 key={`movie-${movie.id}`}
