@@ -10,6 +10,13 @@ import { injectGlobal } from 'styled-components'
 const GlobalStyle = injectGlobal`
   html {
     font-size: 62.5%;
+    min-height: 100%;
+  }
+  
+  html,
+  body,
+  #root {
+    height: 100%;
   }
   
   body {

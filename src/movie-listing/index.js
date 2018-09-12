@@ -7,6 +7,13 @@ import MovieFilters from './MovieFilters';
 import Movie from './Movie';
 import { fetchData } from './api-tmdb';
 
+const Loading = styled.div`
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  height: 100%;
+`;
+
 const List = styled.ul`
   display: flex;
   flex-wrap: wrap;
@@ -60,6 +67,8 @@ class MovieListing extends Component {
         selectedGenres.filter(({ id }) => id !== genre.id) : [ ...selectedGenres, genre ],
     }));
   };
+
+  filterByRating = (e) => this.setState({ selectedRating: e.target.value });
 
   /**
    * Returns a subset of movies that match the genre filters
@@ -117,10 +126,14 @@ class MovieListing extends Component {
   };
 
   render() {
-    const { selectedGenres, genres, movies } = this.state;
+    const { selectedGenres, selectedRating, genres, movies } = this.state;
 
     if (!movies.length || !genres.length) {
-      return 'Loading';
+      return (
+        <Loading>
+          <h3>Loading...</h3>
+        </Loading>
+      );
     }
 
     const movieList = this.getMovies();
@@ -131,18 +144,20 @@ class MovieListing extends Component {
         <MovieFilters
           genres={genreList}
           onFilterGenre={this.filterByGenre}
+          onFilterRating={this.filterByRating}
           selectedGenres={selectedGenres}
+          selectedRating={selectedRating}
         />
         <List>
           {
-            movieList.map(movie => (
+            !!movieList.length ? movieList.map(movie => (
               <Movie
                 genres={genres}
                 key={`movie-${movie.id}`}
                 movie={movie}
                 onClickGenre={this.filterByGenre}
               />
-            ))
+            )) : 'No results!'
           }
         </List>
       </div>

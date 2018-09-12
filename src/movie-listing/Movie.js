@@ -1,9 +1,14 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 import { colours } from '../styles';
 
+import { genresPropType, moviePropType } from './prop-types';
 import { buildImgURL } from './api-tmdb';
+
+const imgWidth = 500;
+const imgHeight = 750;
 
 const ListItem = styled.li`
   box-shadow: 0 1px 5px ${colours.lightGrey};
@@ -11,7 +16,7 @@ const ListItem = styled.li`
   flex-direction: column;
   list-style: none;
   margin: 0 2rem 2rem 0;
-  max-width: 500px;
+  max-width: ${imgWidth}px;
   padding: 0;
 `;
 
@@ -29,7 +34,9 @@ const Title = styled.h2`
 `;
 
 const Img = styled.img`
-  width: 100%;
+  height: ${imgHeight}px;
+  max-width: 100%;
+  width: ${imgWidth}px;
 `;
 
 const GenresList = styled.ul`
@@ -63,7 +70,7 @@ const GenreTag = styled.button`
 const Movie = ({ genres, movie, onClickGenre }) => {
   const { poster_path, genre_ids, overview, title } = movie;
   const matchedGenres = genres.filter(({ id }) => genre_ids.some(genre_id => id === genre_id));
-  const size = 'w500';
+  const size = `w${imgWidth}`;
   const imgURL = buildImgURL(poster_path, size);
 
   return (
@@ -89,6 +96,17 @@ const Movie = ({ genres, movie, onClickGenre }) => {
       <Img alt={overview} src={imgURL} />
     </ListItem>
   );
+};
+
+Movie.propTypes = {
+  genres: genresPropType.isRequired,
+  movie: moviePropType.isRequired,
+  onClickGenre: PropTypes.func.isRequired,
+};
+
+Movie.defaultProps = {
+  genres: [],
+  movie: {},
 };
 
 export default Movie;
