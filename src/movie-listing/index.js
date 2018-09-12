@@ -8,7 +8,9 @@ import Movie from './Movie';
 import { fetchData } from './api-tmdb';
 
 const List = styled.ul`
-  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 0 2rem;
   padding: 0;
 `;
 

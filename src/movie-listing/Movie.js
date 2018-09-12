@@ -1,36 +1,35 @@
 import React from 'react';
 import styled from 'styled-components';
-import { transparentize } from 'polished';
 
 import { colours } from '../styles';
 
 import { buildImgURL } from './api-tmdb';
 
 const ListItem = styled.li`
+  box-shadow: 0 1px 5px ${colours.lightGrey};
   display: flex;
   flex-direction: column;
   list-style: none;
-  margin: 0 0 2rem;
+  margin: 0 2rem 2rem 0;
+  max-width: 500px;
   padding: 0;
 `;
 
 const TitleBar = styled.div`
-  align-items: center;
   background-color: ${colours.darkGrey};
   color: ${colours.white};
   display: flex;
-  justify-content: space-between;
-  padding: 1rem;
+  flex-direction: column;
+  padding: 2rem 1rem;
 `;
 
 const Title = styled.h2`
-  margin: 0;
+  margin: 0 0 1rem;
   padding: 0;
 `;
 
 const Img = styled.img`
   width: 100%;
-  max-width: 1280px;
 `;
 
 const GenresList = styled.ul`
@@ -40,24 +39,32 @@ const GenresList = styled.ul`
 `;
 
 const GenresListItem = styled.li`
-  background-color: ${transparentize(0.25, colours.white)};
-  border-radius: .5rem;
-  color: ${colours.darkGrey};
   list-style: none;
   margin: 0 1rem 0 0;
-  padding: .5rem 1rem;
 
   &:last-child {
     margin-right: 0;
   }
 `;
 
+const genreTagBgColour = colours.blue;
+const GenreTag = styled.button`
+  background-color: ${genreTagBgColour};
+  border: none;
+  border-radius: .5rem;
+  color: ${colours.white};
+  cursor: pointer;
+  font-size: 1.4rem;
+  margin: 0;
+  padding: .5rem 1rem;
+`;
+
 // @todo: propTypes & defaultProps
 const Movie = ({ genres, movie, onClickGenre }) => {
-  const { backdrop_path, genre_ids, popularity, overview, title } = movie;
+  const { poster_path, genre_ids, overview, title } = movie;
   const matchedGenres = genres.filter(({ id }) => genre_ids.some(genre_id => id === genre_id));
-  const size = 'w1280';
-  const imgURL = buildImgURL(backdrop_path, size);
+  const size = 'w500';
+  const imgURL = buildImgURL(poster_path, size);
 
   return (
     <ListItem>
@@ -68,8 +75,10 @@ const Movie = ({ genres, movie, onClickGenre }) => {
             <GenresList>
               {
                 matchedGenres.map(genre => (
-                  <GenresListItem key={`genre-${genre.id}`} onClick={() => onClickGenre(genre)}>
-                    {genre.name}
+                  <GenresListItem key={`genre-${genre.id}`}>
+                    <GenreTag onClick={() => onClickGenre(genre)}>
+                      {genre.name}
+                    </GenreTag>
                   </GenresListItem>
                 ))
               }

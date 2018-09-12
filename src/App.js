@@ -19,7 +19,7 @@ const Header = styled.header`
 
 const Main = styled.main`
   margin: 0 auto;
-  max-width: 1280px;
+  max-width: 1600px;
 `;
 
 class App extends Component {

@@ -15,6 +15,20 @@ const GlobalStyle = injectGlobal`
   body {
     font-size: 1.6rem;
   }
+  
+  /* Normalize */
+  button,
+  input {
+    font-family: inherit;
+    font-size: 100%;
+    line-height: 1.15;
+    margin: 0;
+  }
+  
+  button,
+  input {
+    overflow: visible;
+  }
 `;
 
 export default GlobalStyle;
