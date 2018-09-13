@@ -14,15 +14,26 @@ const Wrapper = styled.div`
 Wrapper.displayName = 'Wrapper';
 
 const Header = styled.header`
+  align-items: center;
   background-color: ${colours.darkGrey};
   color: ${colours.white};
+  display: flex;
+  justify-content: space-between;
   margin: 0 0 2rem;
   padding: 2rem 2rem 1.5rem;
 `;
 Header.displayName = 'Header';
 
 const LogoImg = styled.img`
-  width: 140px;
+  height: 40px;
+`;
+
+const AppTitle = styled.h1`
+  font-size: 2.5rem;
+  font-weight: 400;
+  line-height: 1;
+  margin: 0;
+  padding: 0;
 `;
 
 const Main = styled.main`
@@ -38,6 +49,7 @@ class App extends Component {
       <Wrapper>
         <Header>
           <LogoImg alt="Zone Digital" src={Logo} />
+          <AppTitle>Zone Movie Challenge</AppTitle>
         </Header>
         <Main>
           <ErrorBoundary>

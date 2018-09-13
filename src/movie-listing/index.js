@@ -115,6 +115,10 @@ class MovieListing extends Component {
       .sort(sortObjectByKey('popularity', { type: 'number', order: 'desc' }));
   };
 
+  /**
+   * Filters and sorts all genres, returning only the genres which relate to rendered movies
+   * @returns {Array<Object>}
+   */
   getGenres = (movies) => {
     const { genres } = this.state;
     const allGenres = movies
@@ -150,7 +154,7 @@ class MovieListing extends Component {
         />
         <List>
           {
-            !!movieList.length ? movieList.map(movie => (
+            movieList.length ? movieList.map(movie => (
               <Movie
                 genres={genres}
                 key={`movie-${movie.id}`}

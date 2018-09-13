@@ -11,12 +11,14 @@ Provides a solution to [this challenge](https://github.com/zone/frontend/blob/ma
 
 `yarn test`
 
-### Notes
+#### Notes
 
-I've manually added `displayName` to the StyledComponents that are relevant to unit tests. It avoids ejecting the Create React App config and using `babel-plugin-styled-components`, which in a real world scenario would be a better choice.
+__I've not added as much unit test coverage as I would like, the `movie-listing` components need tests. In the interests of allowing the earliest possible visibility of this challenge to Zone I have provided it as-is, with the aim of completing the test coverage in the very near future.__
 
-#### Assumptions
-I've made some assumptions about what is required for this challenge but in real project I would discuss these things with other team members to get the requirements 100% correct.
+I've manually added `displayName` to the StyledComponents that are relevant to unit tests. It avoids ejecting the Create React App config and using `babel-plugin-styled-components`, which in a real project would be a better choice.
+
+## Assumptions
+I've made some assumptions about what is required for this challenge but in a real project I would discuss these things with other team members to fully understand the requirements and expectations.
 
 1. The TMDb API v3 returns paged results on the [Movies Now Playing endpoint](https://developers.themoviedb.org/3/movies/get-now-playing). I initially looked into requesting all pages in a sequential loop after getting the `page=1` response back and rendering the list, but aside from the obvious perf issues of making 51 sequential XHR requests I hit an issue with there being a limit of 40 requests on the API. I then tried the v4 API and found that the data structure didn't quite look right for the project requirements. I then considered batching the requests into at least two groups, but it occurred to me that there could be a bunch of potential issues with the order of events and the data fetching if the user was able to access the filters prior to the fetching being completed. It was at this point I realised that I was probably over-thinking it and realised that just grabbing the first page of movies was probably sufficient! I re-read the challenge and noticed that it said this:
 
@@ -24,7 +26,7 @@ I've made some assumptions about what is required for this challenge but in real
 
     So I've stopped at page 1 of the results.
 
-2. Given that the genre names should be displayed for each movie, I thought it might make sense to have them behave as filters. This is supplementary functionality that could removed without affecting the main filters.
+2. Given that the genre names should be displayed for each movie, I thought it might make sense to have them behave as filters. This is supplementary functionality that could removed without affecting the main movie filters.
 
 3. I've kept things as lightweight as possible rather than to provide a production quality app, for example I've left out considerations such as:
     1. Routing

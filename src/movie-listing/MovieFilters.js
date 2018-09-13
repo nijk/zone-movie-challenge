@@ -60,7 +60,6 @@ const GenreLabelText = styled.span`
   padding: 0 1rem 0 .5rem;
 `;
 
-// @todo: propTypes & defaultProps
 const MovieFilters = ({ genres, onFilterGenre, onFilterRating, selectedGenres, selectedRating }) => (
   <Wrapper>
     <Title>Filters</Title>
@@ -82,7 +81,7 @@ const MovieFilters = ({ genres, onFilterGenre, onFilterRating, selectedGenres, s
       <Legend>Genres</Legend>
       <GenresWrapper>
         {
-          !!genres.length ? genres.map(genre => (
+          genres.length ? genres.map(genre => (
             <GenreLabel key={`genre-filter-${genre.id}`}>
               <input
                 checked={selectedGenres.some(({ id }) => id === genre.id)}

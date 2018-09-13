@@ -67,7 +67,6 @@ const GenreTag = styled.button`
   padding: .5rem 1rem;
 `;
 
-// @todo: propTypes & defaultProps
 const Movie = ({ genres, movie, onClickGenre }) => {
   const { poster_path, genre_ids, overview, title } = movie;
   const matchedGenres = genres.filter(({ id }) => genre_ids.some(genre_id => id === genre_id));
