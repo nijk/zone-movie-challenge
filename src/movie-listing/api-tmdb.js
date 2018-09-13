@@ -14,13 +14,13 @@ export const buildImgURL = (path, size = IMG_SIZE_DEFAULT) => `${IMG_URL}/${size
 
 const buildURL = (endpointName = '', config = {}) => {
   if (!KEY || !URL || !VERSION) {
-    console.error(`Cannot build URL, config is incorrect. 
+    console.warn(`Cannot build URL, config is incorrect. 
     KEY: ${KEY}, URL: ${URL}, VERSION: ${VERSION}`);
     return '';
   }
 
   if (!Object.prototype.hasOwnProperty.call(endpoints, endpointName)) {
-    console.error(`Endpoint: ${endpointName} does not exist`, endpoints);
+    console.warn(`Endpoint: ${endpointName} does not exist`, endpoints);
     return '';
   }
 

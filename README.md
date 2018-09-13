@@ -13,6 +13,7 @@ Provides a solution to [this challenge](https://github.com/zone/frontend/blob/ma
 
 ### Notes
 
+I've manually added `displayName` to the StyledComponents that are relevant to unit tests. It avoids ejecting the Create React App config and using `babel-plugin-styled-components`, which in a real world scenario would be a better choice.
 
 #### Assumptions
 I've made some assumptions about what is required for this challenge but in real project I would discuss these things with other team members to get the requirements 100% correct.
@@ -34,6 +35,7 @@ I've made some assumptions about what is required for this challenge but in real
     6. i18n & RTL styling
     7. SVG inlining/sprites
     8. UI stuff including: responsive styling, responsive images, critical path styling
+    9. React Storybook stories for components
 
 4. X-Browser testing limited to latest Chrome, Firefox & Safari on Mac OSX
 

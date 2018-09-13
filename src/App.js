@@ -11,6 +11,7 @@ import { colours } from './styles';
 const Wrapper = styled.div`
   height: 100%;
 `;
+Wrapper.displayName = 'Wrapper';
 
 const Header = styled.header`
   background-color: ${colours.darkGrey};
@@ -18,6 +19,7 @@ const Header = styled.header`
   margin: 0 0 2rem;
   padding: 2rem 2rem 1.5rem;
 `;
+Header.displayName = 'Header';
 
 const LogoImg = styled.img`
   width: 140px;
@@ -28,6 +30,7 @@ const Main = styled.main`
   margin: 0 auto;
   max-width: 1600px;
 `;
+Main.displayName = 'Main';
 
 class App extends Component {
   render() {

@@ -21,6 +21,7 @@ const GlobalStyle = injectGlobal`
   
   body {
     font-size: 1.6rem;
+    font-family: Helvetica, Arial, sans-serif;
   }
   
   /* Normalize */

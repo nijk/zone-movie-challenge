@@ -120,7 +120,7 @@ class MovieListing extends Component {
     const allGenres = movies
       .reduce((acc, { genre_ids }) => [ ...acc, ...genre_ids ], [])
       .map(genreId => genres.find(({ id }) => genreId === id))
-      .sort(sortObjectByKey('name', { order: 'desc' }));
+      .sort(sortObjectByKey('name', { type: 'string', order: 'desc' }));
 
     return [ ...new Set(allGenres) ];
   };

@@ -25,10 +25,11 @@ const TitleBar = styled.div`
   color: ${colours.white};
   display: flex;
   flex-direction: column;
-  padding: 2rem 1rem;
+  padding: 2rem;
 `;
 
 const Title = styled.h2`
+  font-weight: 400;
   margin: 0 0 1rem;
   padding: 0;
 `;
